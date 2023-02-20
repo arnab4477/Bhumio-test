@@ -1,118 +1,59 @@
-import React,{useState,useEffect} from 'react'
+import React, { useState, useEffect } from 'react';
 import TextField from '@mui/material/TextField';
-import { LayoutHeader } from './LayoutHeader'
-import {SearchFamily} from '../utils/search.js';
+import { LayoutHeader } from './LayoutHeader';
+import { excludeId } from '../utils/search.js';
 import './SearchBar.css';
-import { useSelectedNodeState, useTreeState,useFilteredIdState,useSearchTextState } from "../contexts";
+import {
+  useSelectedNodeState,
+  useTreeState,
+  useFilteredIdState,
+  useSearchTextState,
+} from '../contexts';
 export default function SearchBar(props) {
-    
-   // const [searchText,setsearchText]=useState("");
-   
-  
-     const [treeState, setTreeDataState] = useTreeState()
+  // const [searchText,setsearchText]=useState("");
 
-     const [filteredId,setFilteredIdState]= useFilteredIdState();
+  const [treeState, setTreeDataState] = useTreeState();
 
-     const [searchText,setSearchTextState]= useFilteredIdState();
+  const [filterIds, setFilteredIdState] = useFilteredIdState();
 
-     
-   
-    const contains = (text, searchText) => {
-        console.log(text,"THIS IS WHAT I AM SEARCHING FOR ",searchText, "type of",typeof(searchText));
-        if(text===undefined||searchText===undefined)return true;
-        return ( (text.toLowerCase().indexOf(searchText.toLowerCase()) >= 0) || searchText===" ");
-    }
-    
+  const [searchText, setSearchTextState] = useSearchTextState();
 
-    const searchLogicReverse=(searchText)=>{
-            
+  const searchLogicReverse = (searchText) => {
+    var filtered = new Set();
 
-        console.log("THIS IS THE UPDATED SEARCH TERM",searchText);
-           
-           
-            var filtered = new Set();
+    excludeId(treeState, filtered, searchText);
+    setFilteredIdState(filtered);
 
-            //true means it shold not add to the set
-            //false means it shsould
-            const recur=(family)=>{
-               
-                if(family==='undefined')return false;
+    return filtered;
+  };
 
-                console.log("RECURSION HAPPENING ",family);
+  console.log('THIS IS THE SEARCH TERM HERE IN COL', searchText);
 
-                const id=family.id;
-                
-               
-                var containChild=true;
+  const handleFilter = (e) => {
+    setSearchTextState(e.target.value);
+    searchLogicReverse(e.target.value);
+  };
 
-                    if (contains(family.Name, searchText)) {
-            
-                        containChild=false;
-                       
-                    }
+  return (
+    <>
+      <LayoutHeader header={'Family Tree'} />
 
-                    if (family?.children) {
-                 
-                        console.log(Object.entries(family.children),"CHILLDREN of",family.Name);
-
-                        for( const [key,val] of Object.entries(family.children)){
-                            console.log("INSIDE ",val);
-                            containChild&=recur(val);
-                        }
-                       
-                        
-                       
-                    }
-                    if(containChild){
-                      
-                        filtered.add(id);
-                        
-                    }
-                    
-                   
-                    return containChild;
-                   
-                    
-            }
-            const ret=recur(treeState);
-           
-            setFilteredIdState(filtered);
-           
-            return filtered;
-            
-            
-        
-    }
-    
-    console.log("THIS IS THE SEARCH TERM HERE IN COL",searchText);
-   
-    const handleFilter=(e)=>{
-        setSearchTextState(e.target.value);
-     
-      
-        searchLogicReverse(e.target.value);
-    }
-
- 
-
-    return (
-        <>
-            <LayoutHeader header={'Family Tree'} />
-            
-            <hr style={{
-            border:'none',
-            marginTop:'10px',
-            marginBottom:"20px",
-            height: '0px',
-            boxShadow:'0 1px 2px 1px #8789f3',
-            width:'100%',
-          
-            }}/>
-              
-            <input  id="input"  type="text" placeholder='Search Family Member' onChange={handleFilter}/>
-          
-           
-
-        </>
-    )
+      <hr
+        style={{
+          border: 'none',
+          marginTop: '10px',
+          marginBottom: '20px',
+          height: '0px',
+          boxShadow: '0 1px 2px 1px #8789f3',
+          width: '100%',
+        }}
+      />
+      <TextField
+        name={'search'}
+        variant="outlined"
+        label={'Search Family Member'}
+        onChange={handleFilter}
+      />
+    </>
+  );
 }
