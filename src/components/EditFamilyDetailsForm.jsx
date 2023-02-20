@@ -1,8 +1,7 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import { Button, TextField } from '@mui/material';
-import { useAddFamily, initialFamilyInfoState } from '../utils';
-import { useSearchTextState } from '../contexts';
+import { useAddFamily } from '../utils';
 const style = {
   position: 'absolute',
   top: '50%',
@@ -15,23 +14,28 @@ const style = {
   p: 4,
 };
 
-export const FamilyDetailsForm = ({ handleClose = () => {} }) => {
-  const { familyInfo, setFamilyInfoState, addFamily, onPicUpload } =
-    useAddFamily({ initialFamilyInfoState, afterAdding: handleClose });
+export const EditFamilyDetailsForm = ({
+  handleClose = () => {},
+  familyInfoToUpdate,
+}) => {
+  const { setFamilyInfoState, editFamily, onPicUpload } = useAddFamily({
+    familyInfoToUpdate,
+    afterAdding: handleClose,
+  });
 
-  const [term, setTerm] = useSearchTextState();
+  console.log(familyInfoToUpdate);
 
   return (
     <Box sx={style}>
       <form
-        onSubmit={addFamily}
+        onSubmit={editFamily}
         style={{
           display: 'flex',
           flexDirection: 'column',
           gap: '10px',
         }}
       >
-        {Object.keys(initialFamilyInfoState).map(
+        {Object.keys(familyInfoToUpdate).map(
           (fieldKey, i) =>
             fieldKey !== 'Family Photo' && (
               <TextField
@@ -39,7 +43,7 @@ export const FamilyDetailsForm = ({ handleClose = () => {} }) => {
                 name={fieldKey}
                 variant="outlined"
                 label={fieldKey}
-                defaultValue={initialFamilyInfoState[fieldKey]}
+                defaultValue={familyInfoToUpdate[fieldKey]}
                 onChange={setFamilyInfoState}
               />
             )
@@ -59,8 +63,8 @@ export const FamilyDetailsForm = ({ handleClose = () => {} }) => {
           />
         </Button>
         <div>
-          {familyInfo['Family Photo'] &&
-            familyInfo['Family Photo'].map((src) => (
+          {familyInfoToUpdate['Family Photo'] &&
+            familyInfoToUpdate['Family Photo'].map((src) => (
               <img
                 style={{ padding: '5px' }}
                 src={src}
@@ -72,7 +76,7 @@ export const FamilyDetailsForm = ({ handleClose = () => {} }) => {
         </div>
         <div style={{ textAlign: 'center' }}>
           <Button variant="contained" type="submit">
-            Add
+            Update & Save
           </Button>
         </div>
       </form>
