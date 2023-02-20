@@ -11,3 +11,5 @@
 - I modified and isolated the recursive id exclusion function to the search.js and deleted the part of the code that I felt were no longer needed
 
 ## Added Custom Label 1 and 2 & improved the Export JSON function by adding indentation to the exported JSON file
+
+## Changed the styles to make the application responsive to mobile devices
