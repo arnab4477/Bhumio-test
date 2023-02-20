@@ -10,4 +10,4 @@
 - Contains was declared in two files. And even though the SearchFamily is imported in SearchBar.jsx , it was not being used. I exported the improved version of contains from search.js and deleted the one in searchBar.jsx
 - I modified and isolated the recursive id exclusion function to the search.js and deleted the part of the code that I felt were no longer needed
 
-## Added Custom Label 1 and 2
+## Added Custom Label 1 and 2 & improved the Export JSON function by adding indentation to the exported JSON file

@@ -23,7 +23,11 @@ export const ExportFamilyBtn = () => {
   }
 
   function onDownload() {
-    download(JSON.stringify(data), 'FamilyTree.json', 'application/json');
+    download(
+      JSON.stringify(data, null, 2),
+      'FamilyTree.json',
+      'application/json'
+    );
   }
   return (
     <>
