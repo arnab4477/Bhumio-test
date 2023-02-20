@@ -21,6 +21,8 @@ export const initialFamilyInfoState = {
   Location: '',
   'Birth Year': '',
   'Present Address': '',
+  'Custom Label 1': '',
+  'Custom Label 2': '',
   'Family Photo': null,
 };
 
@@ -43,7 +45,7 @@ export const useDeleteFamily = (afterAdding = () => {}) => {
             // console.log(node,"this is the flow of ancestor ",i);
             let parent = currentNode;
             currentNode = currentNode.children[node];
-            if (currentNode.id == uId) {
+            if (currentNode.id === uId) {
               delete parent.children[uId];
             }
           }
